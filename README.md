@@ -15,4 +15,5 @@ export PATH="$M2_HOME/bin:$PATH"
 3. sau khi chạy xong vào thư mục `app/build/target/libs` sẽ thấy file `app.jar`, đây là file thực thi đã build xong
 ## Hướng dẫn chạy
 1. Copy file thực thi vào máy cài hadoop
-2. chạy bằng hadoop `hadoop jar app.jar facebook_hadoop.App /data/document/filtered_output_utf8.csv /data/document/output` trong filtered_output_utf8.csv là file đầu vào theo mẫu đã gửi
+2. Copy thư mục models vào trong máy hadoop, để cùng vị trí với file app.jar trên.
+3. chạy bằng hadoop `hadoop jar app.jar facebook_hadoop.App /data/document/filtered_output_utf8.csv /data/document/output` trong filtered_output_utf8.csv là file đầu vào theo mẫu đã gửi
