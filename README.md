@@ -7,7 +7,7 @@ M2_HOME='/opt/apache-maven-3.8.8'
 export PATH="$M2_HOME/bin:$PATH"
 ``` 
 4. chạy lệnh `source ~/.bashrc`
-5. test cài đặt mvn `mvn -version` thay output hiện phiên bản mvn là oki
+5. test cài đặt mvn `mvn -version` thấy output hiện phiên bản mvn là oki
 6. vào lại thư mục source facebook_hadoop chạy lệnh sau `mvn install:install-file -Dfile=libs/marmot.jar -DgroupId=vncorenlp -DartifactId=marmot -Dversion=1.0 -Dpackaging=jar` thấy không báo lỗi thì chuyển sang bước build
 ## Hướng dẫn build
 1. cấp quyền cho file gradlew bằng lệnh `chmod +x gradlew`
