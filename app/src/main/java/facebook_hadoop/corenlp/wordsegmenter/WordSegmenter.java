@@ -12,9 +12,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * @author DatQuocNguyen
- */
 public class WordSegmenter {
     private Node root;
     private static WordSegmenter wordSegmenter = null;
@@ -23,9 +20,9 @@ public class WordSegmenter {
     public WordSegmenter()
             throws IOException {
         LOGGER.info("Loading Word Segmentation model");
-        String modelPath = facebook_hadoop.pipeline.Utils.jarDir +
-                "/models/wordsegmenter/wordsegmenter.rdr";
-        // String modelPath = "./models/wordsegmenter/wordsegmenter.rdr";
+        // String modelPath = facebook_hadoop.pipeline.Utils.jarDir +
+        // "/models/wordsegmenter/wordsegmenter.rdr";
+        String modelPath = "./models/wordsegmenter/wordsegmenter.rdr";
         if (!new File(modelPath).exists())
             throw new IOException("WordSegmenter: " + modelPath + " is not found!");
 

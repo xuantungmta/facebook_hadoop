@@ -4,13 +4,17 @@
 package facebook_hadoop;
 
 import java.io.IOException;
+import java.util.*;
 
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.WritableComparable;
+import org.apache.hadoop.io.WritableComparator;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
@@ -20,6 +24,7 @@ import facebook_hadoop.pipeline.VnCoreNLP;
 
 public class App {
     private static VnCoreNLP pipeline;
+    private static List<String> specCharacter = Arrays.asList("[", "]", ",", ".", "-", "+", ":", "^", "\"");
 
     public static class DataExtractionMapper extends Mapper<Object, Text, Text, IntWritable> {
 
@@ -33,9 +38,15 @@ public class App {
                 String raw_text = cells[7];
                 Annotation annotation = new Annotation(raw_text);
                 pipeline.annotate(annotation);
-                String[] results = annotation.toString().split(" ");
-                for (String item : results) {
-                    context.write(new Text(item), one);
+                String[] list_sentences = annotation.toString().split("\n\n");
+                for (String sent : list_sentences) {
+                    String[] list_words = sent.split("\n");
+                    for (String item : list_words) {
+                        String word = item.replace("\t\t", "\t").split("\t")[1];
+                        if (specCharacter.stream().anyMatch(word::equals))
+                            continue;
+                        context.write(new Text(word.trim().toLowerCase()), one);
+                    }
                 }
 
             } catch (Exception ex) {
@@ -57,6 +68,20 @@ public class App {
         }
     }
 
+    public static class DescendingKeyComparator extends WritableComparator {
+        protected DescendingKeyComparator() {
+            super(Text.class, true);
+        }
+
+        @SuppressWarnings("rawtypes")
+        @Override
+        public int compare(WritableComparable w1, WritableComparable w2) {
+            IntWritable key1 = (IntWritable) w1;
+            IntWritable key2 = (IntWritable) w2;
+            return -1 * key1.compareTo(key2);
+        }
+    }
+
     public static void main(String[] args) throws Exception {
         pipeline = new VnCoreNLP(new String[] { "wseg" });
         Configuration conf = new Configuration();
@@ -64,6 +89,7 @@ public class App {
         job.setJarByClass(App.class);
         job.setMapperClass(DataExtractionMapper.class);
         job.setReducerClass(DataExtractionReducer.class);
+        // job.setSortComparatorClass(DescendingKeyComparator.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
         FileInputFormat.addInputPath(job, new Path(args[0]));

@@ -5,10 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * @author DatQuocNguyen
- *
- */
 public class Utils {
     public static FWObject getCondition(String strCondition) {
         FWObject condition = new FWObject(false);

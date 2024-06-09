@@ -15,7 +15,8 @@ public class Vocabulary {
     static {
         VN_DICT = new HashSet<String>();
         try {
-            String vocabPath = Utils.jarDir + "/models/wordsegmenter/vi-vocab";
+            // String vocabPath = Utils.jarDir + "/models/wordsegmenter/vi-vocab";
+            String vocabPath = "./models/wordsegmenter/vi-vocab";
             if (!new File(vocabPath).exists())
                 throw new IOException("Vocabulary: " + vocabPath + " is not found!");
             // Vocabulary.class.getClassLoader().getResource("wordsegmenter/vi-vocab").getPath()
