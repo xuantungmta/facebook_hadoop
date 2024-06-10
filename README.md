@@ -21,4 +21,5 @@ export PATH="$M2_HOME/bin:$PATH"
 ## Hướng dẫn chạy
 1. Copy file thực thi vào máy cài hadoop
 2. Copy thư mục models vào trong máy hadoop, để cùng vị trí với file app.jar trên.
-3. chạy bằng hadoop `hadoop jar app.jar facebook_hadoop.App /data/document/filtered_output_utf8.csv /data/document/output` trong filtered_output_utf8.csv là file đầu vào theo mẫu đã gửi
+3. chạy bằng hadoop `hadoop jar app.jar facebook_hadoop.WordCount /data/document/filtered_output_utf8.csv /data/document/output` trong filtered_output_utf8.csv là file đầu vào theo mẫu đã gửi để thống kê từ khóa
+4. chạy bằng hadoop `hadoop jar app.jar facebook_hadoop.WordSort /data/document/output/part-r-00000 /data/document/output1` để sắp xếp từ khóa, trong đó file part-r-00000 là file kết quả của bước số 3
