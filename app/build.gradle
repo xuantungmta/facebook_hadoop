@@ -42,7 +42,7 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'facebook_hadoop.App'
+    mainClass = 'facebook_hadoop.WordSort'
 }
 
 tasks.named('test') {

@@ -3,6 +3,8 @@
  */
 package facebook_hadoop;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
@@ -11,10 +13,7 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.io.WritableComparable;
-import org.apache.hadoop.io.WritableComparator;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
@@ -22,9 +21,11 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import facebook_hadoop.pipeline.Annotation;
 import facebook_hadoop.pipeline.VnCoreNLP;
 
-public class App {
+public class WordCount {
     private static VnCoreNLP pipeline;
-    private static List<String> specCharacter = Arrays.asList("[", "]", ",", ".", "-", "+", ":", "^", "\"");
+    private static List<String> specCharacter = Arrays.asList("[", "]", ",", ".", "-", "+", ":", "^", "\"", "(", ")",
+            "'", "&", "*", "$", "@", "%", "!", "#", "…", "?", "”", "“", "null", "-", ";", "/");
+    private static List<String> stopWords;
 
     public static class DataExtractionMapper extends Mapper<Object, Text, Text, IntWritable> {
 
@@ -42,8 +43,12 @@ public class App {
                 for (String sent : list_sentences) {
                     String[] list_words = sent.split("\n");
                     for (String item : list_words) {
-                        String word = item.replace("\t\t", "\t").split("\t")[1];
+                        String word = item.replace("\t\t", "\t").split("\t")[1].replaceAll("\\.", "");
+                        if (word == null || word.equals(""))
+                            continue;
                         if (specCharacter.stream().anyMatch(word::equals))
+                            continue;
+                        if (stopWords.stream().anyMatch(word::equals))
                             continue;
                         context.write(new Text(word.trim().toLowerCase()), one);
                     }
@@ -68,25 +73,28 @@ public class App {
         }
     }
 
-    public static class DescendingKeyComparator extends WritableComparator {
-        protected DescendingKeyComparator() {
-            super(Text.class, true);
-        }
-
-        @SuppressWarnings("rawtypes")
-        @Override
-        public int compare(WritableComparable w1, WritableComparable w2) {
-            IntWritable key1 = (IntWritable) w1;
-            IntWritable key2 = (IntWritable) w2;
-            return -1 * key1.compareTo(key2);
-        }
-    }
-
     public static void main(String[] args) throws Exception {
+        stopWords = new ArrayList<>();
+        BufferedReader reader;
+        try {
+            // String pathStopwordFile = "./models/vietnamese-stopwords-dash.txt";
+            String pathStopwordFile = "/home/mypc/scripts/facebook_hadoop/models/vietnamese-stopwords-dash.txt";
+            reader = new BufferedReader(new FileReader(pathStopwordFile));
+            String line = "";
+            while (line != null) {
+                line = reader.readLine();
+                stopWords.add(line);
+            }
+
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         pipeline = new VnCoreNLP(new String[] { "wseg" });
+
         Configuration conf = new Configuration();
         Job job = Job.getInstance(conf, "Facebook extraction");
-        job.setJarByClass(App.class);
+        job.setJarByClass(WordCount.class);
         job.setMapperClass(DataExtractionMapper.class);
         job.setReducerClass(DataExtractionReducer.class);
         // job.setSortComparatorClass(DescendingKeyComparator.class);

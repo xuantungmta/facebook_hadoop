@@ -10,6 +10,11 @@ export PATH="$M2_HOME/bin:$PATH"
 5. test cài đặt mvn `mvn -version` thấy output hiện phiên bản mvn là oki
 6. vào lại thư mục source facebook_hadoop chạy lệnh sau `mvn install:install-file -Dfile=libs/marmot.jar -DgroupId=vncorenlp -DartifactId=marmot -Dversion=1.0 -Dpackaging=jar` thấy không báo lỗi thì chuyển sang bước build
 ## Hướng dẫn build
+0. trước khi build chỉnh lại đường dẫn của model tại file `corenlp/wordsegmenter/Vocubulary.java và WordSegmenter.java`, dùng đường dẫn tại dòng 18 và dòng 23 như sau:
+```
+    String vocabPath = Utils.jarDir + "/models/wordsegmenter/vi-vocab";
+    String modelPath = facebook_hadoop.pipeline.Utils.jarDir + "/models/wordsegmenter/wordsegmenter.rdr";
+```
 1. cấp quyền cho file gradlew bằng lệnh `chmod +x gradlew`
 2. chạy lệnh `./gradlew build`, gradle sẽ tải dependencies cho lần đầu tiên build
 3. sau khi chạy xong vào thư mục `app/build/target/libs` sẽ thấy file `app.jar`, đây là file thực thi đã build xong

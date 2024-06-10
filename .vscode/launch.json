@@ -5,70 +5,26 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Java",
       "type": "java",
+      "name": "WordCount",
       "request": "launch",
-      "stopOnEntry": true,
-      "jdkPath": "${env:JAVA_HOME}/bin",
-      "cwd": "${fileDirname}",
-      "startupClass": "${fileBasenameNoExtension}",
-      "classpath": [".", "${fileDirname}"]
-    },
-    {
-      "name": "Java Console App",
-      "type": "java",
-      "request": "launch",
-      "stopOnEntry": true,
-      "jdkPath": "${env:JAVA_HOME}/bin",
-      "cwd": "${fileDirname}",
-      "startupClass": "${fileBasenameNoExtension}",
-      "classpath": [".", "${fileDirname}"],
-      "externalConsole": true
-    },
-    {
-      "type": "java",
-      "name": "Current File",
-      "request": "launch",
-      "mainClass": "${file}"
-    },
-    {
-      "type": "java",
-      "name": "App",
-      "request": "launch",
-      "mainClass": "facebook_hadoop.App",
+      "mainClass": "facebook_hadoop.WordCount",
       "projectName": "app",
       "args": [
-        "/home/m0lw9re/Downloads/filtered_output_utf8.csv",
-        "/home/m0lw9re/Downloads/out_0001"
+        "/home/mypc/Downloads/filtered_output_utf8.csv",
+        "/home/mypc/Downloads/out_0001"
       ]
     },
     {
       "type": "java",
-      "name": "NerRecognizer",
+      "name": "WordSort",
       "request": "launch",
-      "mainClass": "facebook_hadoop.corenlp.ner.NerRecognizer",
-      "projectName": "app"
-    },
-    {
-      "type": "java",
-      "name": "DependencyParser",
-      "request": "launch",
-      "mainClass": "facebook_hadoop.corenlp.parser.DependencyParser",
-      "projectName": "app"
-    },
-    {
-      "type": "java",
-      "name": "Regex",
-      "request": "launch",
-      "mainClass": "facebook_hadoop.corenlp.tokenizer.Regex",
-      "projectName": "app"
-    },
-    {
-      "type": "java",
-      "name": "VnCoreNLP",
-      "request": "launch",
-      "mainClass": "facebook_hadoop.pipeline.VnCoreNLP",
-      "projectName": "app"
+      "mainClass": "facebook_hadoop.WordSort",
+      "projectName": "app",
+      "args": [
+        "/home/mypc/Downloads/out_0001/part-r-00000",
+        "/home/mypc/Downloads/out_0002"
+      ]
     }
   ]
 }
