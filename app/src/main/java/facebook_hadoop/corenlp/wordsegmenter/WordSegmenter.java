@@ -20,9 +20,10 @@ public class WordSegmenter {
     public WordSegmenter()
             throws IOException {
         LOGGER.info("Loading Word Segmentation model");
-        // String modelPath = facebook_hadoop.pipeline.Utils.jarDir +
-        // "/models/wordsegmenter/wordsegmenter.rdr";
-        String modelPath = "/home/mypc/scripts/facebook_hadoop/models/wordsegmenter/wordsegmenter.rdr";
+        String modelPath = facebook_hadoop.pipeline.Utils.jarDir +
+                "/models/wordsegmenter/wordsegmenter.rdr";
+        // String modelPath =
+        // "/home/mypc/scripts/facebook_hadoop/models/wordsegmenter/wordsegmenter.rdr";
         if (!new File(modelPath).exists())
             throw new IOException("WordSegmenter: " + modelPath + " is not found!");
 

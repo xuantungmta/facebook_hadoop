@@ -19,6 +19,7 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import facebook_hadoop.pipeline.Annotation;
+import facebook_hadoop.pipeline.Utils;
 import facebook_hadoop.pipeline.VnCoreNLP;
 
 public class WordCount {
@@ -77,8 +78,9 @@ public class WordCount {
         stopWords = new ArrayList<>();
         BufferedReader reader;
         try {
-            // String pathStopwordFile = "./models/vietnamese-stopwords-dash.txt";
-            String pathStopwordFile = "/home/mypc/scripts/facebook_hadoop/models/vietnamese-stopwords-dash.txt";
+            String pathStopwordFile = Utils.jarDir + "/models/vietnamese-stopwords-dash.txt";
+            // String pathStopwordFile =
+            // "/home/mypc/scripts/facebook_hadoop/models/vietnamese-stopwords-dash.txt";
             reader = new BufferedReader(new FileReader(pathStopwordFile));
             String line = "";
             while (line != null) {
