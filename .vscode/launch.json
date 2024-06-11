@@ -11,8 +11,8 @@
       "mainClass": "facebook_hadoop.WordCount",
       "projectName": "app",
       "args": [
-        "/home/mypc/Downloads/filtered_output_utf8.csv",
-        "/home/mypc/Downloads/out_0001"
+        "/home/mypc/scripts/facebook_hadoop/data/post.csv",
+        "/home/mypc/scripts/facebook_hadoop/data/out_0001"
       ]
     },
     {
@@ -22,8 +22,32 @@
       "mainClass": "facebook_hadoop.WordSort",
       "projectName": "app",
       "args": [
-        "/home/mypc/Downloads/out_0001/part-r-00000",
-        "/home/mypc/Downloads/out_0002"
+        "/home/mypc/scripts/facebook_hadoop/data/out_0001/part-r-00000",
+        "/home/mypc/scripts/facebook_hadoop/data/out_0002"
+      ]
+    },
+    {
+      "type": "java",
+      "name": "PostByTime",
+      "request": "launch",
+      "mainClass": "facebook_hadoop.PostByTime",
+      "projectName": "app",
+      "args": [
+        "/home/mypc/scripts/facebook_hadoop/data/post.csv",
+        "/home/mypc/scripts/facebook_hadoop/data/out_0003",
+        "1/3/2023",
+        "5/3/2023"
+      ]
+    },
+    {
+      "type": "java",
+      "name": "ShopCount",
+      "request": "launch",
+      "mainClass": "facebook_hadoop.ShopCount",
+      "projectName": "app",
+      "args": [
+        "/home/mypc/scripts/facebook_hadoop/data/shop",
+        "/home/mypc/scripts/facebook_hadoop/data/out_shop"
       ]
     }
   ]

@@ -6,8 +6,6 @@ import java.text.SimpleDateFormat;
 
 import java.io.IOException;
 
-import javax.naming.Context;
-
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
@@ -18,26 +16,30 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
-public class App2 {
+public class PostByTime {
+    public static Date startDate;
+    public static Date endDate;
+
     public static class ReportMapper extends Mapper<Object, Text, Text, IntWritable> {
         private final static IntWritable one = new IntWritable(1);
 
         public void map(Object ikey, Text ivalue, Context context)
                 throws IOException, InterruptedException {
             String row = ivalue.toString();
-            String[] cells = row.split(",");
+            String[] cells = row.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
             try {
-                DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
+                DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX");
                 Date createdDate = df.parse(cells[4]);
                 if (toDateRange(createdDate))
                     context.write(new Text(cells[0]), one);
             } catch (Exception ex) {
+                String mess = ex.getMessage();
             }
         }
 
         private Boolean toDateRange(Date createdDate) {
-            return createdDate.compareTo(new Date("20/5/2024")) >= 0
-                    && createdDate.compareTo(new Date("31/06/2024")) < 0;
+            return createdDate.compareTo(startDate) >= 0
+                    && createdDate.compareTo(endDate) < 0;
         }
     }
 
@@ -56,9 +58,14 @@ public class App2 {
     }
 
     public static void main(String[] args) throws Exception {
+        // initialize
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        startDate = df.parse(args[2]);
+        endDate = df.parse(args[3]);
+
         Configuration conf = new Configuration();
         Job job = Job.getInstance(conf, "facebook post count");
-        job.setJarByClass(App2.class);
+        job.setJarByClass(PostByTime.class);
         job.setMapperClass(ReportMapper.class);
         job.setReducerClass(DataExtractionReducer.class);
         job.setOutputKeyClass(Text.class);
